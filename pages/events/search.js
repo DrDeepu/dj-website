@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import Eventitem from "@/components/Eventitem";
 import { API_URL } from "@/config/index";
 import Link from "next/link";
-function EventPage({ event }) {
+function SearchPage({ event }) {
   // console.log(event);
   return (
     <Layout>
@@ -15,11 +15,15 @@ function EventPage({ event }) {
   );
 }
 
-export default EventPage;
+export default SearchPage;
 
-export async function getStaticProps() {
-  const res = await fetch(`${API_URL}/api/events?populate=*&sort=Date:ASC`);
+export async function getServerSideProps({query:{term}}) {
+//   const res = await fetch(`${API_URL}/api/events?populate=*&sort=Date:ASC`);
+  const res = await fetch(
+    `${API_URL}/api/events?populate=*&filters[slug][$containsi]=${term}`
+  );
   const event = await res.json();
   // console.log(event);
-  return { props: { event }, revalidate: 1 };
+  return { props: { event }};
 }
+ 

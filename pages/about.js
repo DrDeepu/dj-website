@@ -4,6 +4,7 @@ const AboutPage = () => {
   return (
     <Layout title="About Page">
       <h1>About</h1>
+      <p>Created By : Deepu Kumar</p> 
       <p>This is the about page for DJ events application</p>
       <p>Version : 1.0.0</p>
 
