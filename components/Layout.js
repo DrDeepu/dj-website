@@ -14,6 +14,7 @@ const Layout = ({ title, description, keywords, children }) => {
         <meta content={description} name="description" />
         <meta content={keywords} name="keywords" />
       </Head>
+      <Head />
       <Header />
       {router.pathname === "/" && <Showcase />}
       <div className={styles.container}>{children}</div>

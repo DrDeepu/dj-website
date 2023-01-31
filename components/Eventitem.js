@@ -9,7 +9,7 @@ export default function Eventitem({ evy }) {
         <Image
           src={
             evy.attributes.Image.data
-              ? evy.attributes.Image.data.attributes.formats.small.url
+              ? evy.attributes.Image.data.attributes.url
               : "/images/event-default.png"
           }
           width={170}

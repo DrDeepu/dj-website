@@ -20,6 +20,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
     "react-toastify": "^9.1.1",
+    "reactstrap": "^9.1.5",
     "s": "^1.0.0",
     "strapi-plugin-slugify": "^2.3.2"
   }

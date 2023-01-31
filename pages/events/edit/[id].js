@@ -1,4 +1,6 @@
 import axios from "axios";
+import Model from "@/components/Model";
+import { FaImage } from "react-icons/fa";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,10 +10,12 @@ import Layout from "@/components/Layout";
 import { API_URL } from "@/config/index";
 import moment from "moment";
 import styles from "@/styles/Form.module.css";
+import Image from "next/image";
+import ImageUpload from "@/components/ImageUpload";
 
 const EditEventPage = ({ data }) => {
-  console.log("MAIN FUNCTINO ", data);
   const dat = data.data;
+  // console.log("MAIN FUNCTINO ", dat.attributes.Image.data.attributes.formats.large.url);
   const [values, setValues] = useState({
     Name: dat.attributes.Name,
     Performers: dat.attributes.Performers,
@@ -21,6 +25,14 @@ const EditEventPage = ({ data }) => {
     Time: dat.attributes.Time,
     Description: dat.attributes.Description,
   });
+  const [imagePreview, setImagePreview] = useState(
+    dat.attributes.Image.data
+      ? dat.attributes.Image.data.attributes.url
+      : null
+  );
+  const [showModal, setShowModal] = useState(false);
+  // console.log('IMAGE',imagePreview);
+  // console.log(dat);
   const router = useRouter();
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,7 +45,7 @@ const EditEventPage = ({ data }) => {
       toast.error("Please fill all the fields");
     } else {
       axios
-        .put(`${API_URL}/api/events/${dat.id}`, { data: values })
+        .put(`${API_URL}/api/events/${dat.id}&?populate=*`, { data: values })
         .then((response) => {
           console.log("SUCCESS", response);
           const urls = response.data.data.attributes.Slug;
@@ -48,6 +60,10 @@ const EditEventPage = ({ data }) => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
+  };
+
+  const imageUploaded = () => {
+    console.log("Uploaded");
   };
   return (
     <Layout title="Add Event Page">
@@ -130,6 +146,33 @@ const EditEventPage = ({ data }) => {
         </div>
         <input type="submit" value="Update Event" className="btn" />
       </form>
+      <h2>Event Image</h2>
+      {imagePreview ? (
+        <>
+          <Image
+            src={dat.attributes.Image.data.attributes.url}
+            width={100}
+            height={100}
+            alt="Image not Found"
+          />
+
+          <div>
+            <button
+              className="btn-secondary"
+              onClick={() => setShowModal(true)}
+            >
+              <FaImage /> Set Image
+            </button>
+          </div>
+          <Model show={showModal} onClose={() => setShowModal(false)}>
+            <ImageUpload eventId={dat.id} imageUploaded={imageUploaded} />
+          </Model>
+        </>
+      ) : (
+        <div>
+          <p>Image not Uploaded</p>
+        </div>
+      )}
     </Layout>
   );
 };
@@ -139,11 +182,12 @@ export default EditEventPage;
 export async function getServerSideProps({ params: { id } }) {
   //   console.log(id);
   let data = await axios
-    .get(`http://localhost:1337/api/events/${id}`)
+    .get(`http://localhost:1337/api/events/${id}?populate=*`)
     .then((response) => {
       return response;
     })
     .catch((response) => console.log("FAILED"));
+  console.log("AXIOS", data);
   return {
     props: { data: data.data },
   };

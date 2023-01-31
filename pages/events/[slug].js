@@ -45,10 +45,11 @@ const EventPage = ({ dat }) => {
         {dat.attributes.Image && (
           <div className={styles.image}>
             {" "}
+            {console.log('DAT',dat)}
             <Image
               src={
                 dat.attributes.Image.data != null
-                  ? dat.attributes.Image.data.attributes.formats.large.url
+                  ? dat.attributes.Image.data.attributes.url
                   : "/images/event-default.png"
               }
               width={960}
