@@ -6,16 +6,20 @@ import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import Layout from "@/components/Layout";
 import { API_URL } from "@/config/index";
+import moment from "moment";
 import styles from "@/styles/Form.module.css";
-const AddEventPage = () => {
+
+const EditEventPage = ({ data }) => {
+  console.log("MAIN FUNCTINO ", data);
+  const dat = data.data;
   const [values, setValues] = useState({
-    Name: "",
-    Performers: "",
-    Venue: "",
-    Address: "",
-    Date: "",
-    Time: "",
-    Description: "",
+    Name: dat.attributes.Name,
+    Performers: dat.attributes.Performers,
+    Venue: dat.attributes.Venue,
+    Address: dat.attributes.Address,
+    Date: dat.attributes.Date,
+    Time: dat.attributes.Time,
+    Description: dat.attributes.Description,
   });
   const router = useRouter();
   const handleSubmit = async (event) => {
@@ -28,17 +32,16 @@ const AddEventPage = () => {
     if (hasEmptyFields) {
       toast.error("Please fill all the fields");
     } else {
-      const res = await axios
-        .post(`${API_URL}/api/events`, {
-          data: values,
-        })
+      axios
+        .put(`${API_URL}/api/events/${dat.id}`, { data: values })
         .then((response) => {
           console.log("SUCCESS", response);
           const urls = response.data.data.attributes.Slug;
-          router.push("/events/" + urls);
+          router.push("/events");
         })
         .catch((response) => console.log("ERROR", response));
-      console.log(res);
+
+      //   console.log(res);
     }
   };
 
@@ -49,7 +52,7 @@ const AddEventPage = () => {
   return (
     <Layout title="Add Event Page">
       <Link href="/events">Go Back</Link>
-      <h1>Add Event</h1>
+      <h1>Edit Event</h1>
       <ToastContainer />
 
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -100,7 +103,7 @@ const AddEventPage = () => {
               type="date"
               id="Date"
               name="Date"
-              value={values.Date}
+              value={moment(values.Date).format("yyyy-MM-DD")}
               onChange={handleInputChange}
             ></input>
           </div>
@@ -125,10 +128,23 @@ const AddEventPage = () => {
             onChange={handleInputChange}
           ></textarea>
         </div>
-        <input type="submit" value="Add Event" className="btn" />
+        <input type="submit" value="Update Event" className="btn" />
       </form>
     </Layout>
   );
 };
 
-export default AddEventPage;
+export default EditEventPage;
+
+export async function getServerSideProps({ params: { id } }) {
+  //   console.log(id);
+  let data = await axios
+    .get(`http://localhost:1337/api/events/${id}`)
+    .then((response) => {
+      return response;
+    })
+    .catch((response) => console.log("FAILED"));
+  return {
+    props: { data: data.data },
+  };
+}
