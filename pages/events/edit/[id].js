@@ -26,9 +26,7 @@ const EditEventPage = ({ data }) => {
     Description: dat.attributes.Description,
   });
   const [imagePreview, setImagePreview] = useState(
-    dat.attributes.Image.data
-      ? dat.attributes.Image.data.attributes.url
-      : null
+    dat.attributes.Image.data ? dat.attributes.Image.data.attributes.url : null
   );
   const [showModal, setShowModal] = useState(false);
   // console.log('IMAGE',imagePreview);
@@ -70,7 +68,6 @@ const EditEventPage = ({ data }) => {
       <Link href="/events">Go Back</Link>
       <h1>Edit Event</h1>
       <ToastContainer />
-
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.grid}>
           <div>
@@ -155,24 +152,20 @@ const EditEventPage = ({ data }) => {
             height={100}
             alt="Image not Found"
           />
-
-          <div>
-            <button
-              className="btn-secondary"
-              onClick={() => setShowModal(true)}
-            >
-              <FaImage /> Set Image
-            </button>
-          </div>
-          <Model show={showModal} onClose={() => setShowModal(false)}>
-            <ImageUpload eventId={dat.id} imageUploaded={imageUploaded} />
-          </Model>
         </>
       ) : (
         <div>
           <p>Image not Uploaded</p>
         </div>
-      )}
+      )}{" "}
+      <div>
+        <button className="btn-secondary" onClick={() => setShowModal(true)}>
+          <FaImage /> Set Image
+        </button>
+      </div>
+      <Model show={showModal} onClose={() => setShowModal(false)}>
+        <ImageUpload eventId={dat.id} imageUploaded={imageUploaded} />
+      </Model>
     </Layout>
   );
 };
