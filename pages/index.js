@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import Eventitem from "@/components/Eventitem";
 import { API_URL } from "../config/index";
 import Link from "next/link";
+import axios from "axios";
 function HomePage({ event }) {
   return (
     <Layout>
@@ -22,7 +23,9 @@ function HomePage({ event }) {
 export default HomePage;
 
 export async function getStaticProps() {
-  const res = await fetch(`${API_URL}/api/events?populate=*&sort=Date:ASC`);
-  const event = await res.json();
-  return { props: { event: event.data.slice(0, 3) }, revalidate: 1 };
+  const res = await axios
+    .get(`${API_URL}/api/events?populate=*&sort=Date:ASC`)
+    .then((response) => response);
+  const event = res;
+  return { props: { event: event.data.data.slice(0, 3) }, revalidate: 1 };
 }
