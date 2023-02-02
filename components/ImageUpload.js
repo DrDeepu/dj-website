@@ -13,10 +13,7 @@ const ImageUpload = ({ eventId, imageUploaded }) => {
     formData.append("refId", eventId);
     formData.append("field", "Image");
 
-    const datas = await fetch(`${API_URL}/api/upload`, {
-      method: "post",
-      body: formData,
-    });
+    const datas = await axios.post(`${API_URL}/api/upload`, formData);
 
     // const d = await axios.put(`${API_URL}/api/upload`, {
     //   data: formData,
