@@ -17,7 +17,7 @@ const LoginPage = () => {
     if (password !== passwordConfirm) {
       toast.error("Passowrd dosen't match");
     }
-    register({ username, email, password, passwordConfirm });
+    register({ username, email, password });
   };
 
   return (
@@ -66,10 +66,10 @@ const LoginPage = () => {
               autoComplete="on"
             />
           </div>
-          <input type="submit" className="btn" />
+          <input type="submit" className="btn" value="Register" />
         </form>
         <p>
-          Dont have an account? <Link href="/account/register">Register</Link>
+          Already have an account <Link href="/account/login">Login</Link>
         </p>
       </div>
     </Layout>

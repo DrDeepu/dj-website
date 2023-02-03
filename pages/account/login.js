@@ -47,7 +47,7 @@ const LoginPage = () => {
               autoComplete="on"
             />
           </div>
-          <input type="submit" className="btn" />
+          <input type="submit" className="btn" value="Login" />
         </form>
         <p>
           Dont have an account? <Link href="/account/register">Register</Link>

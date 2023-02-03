@@ -6,11 +6,13 @@ export default async (req, res) => {
   // console.log("REQ", req);
   // console.log("RES0", res);
   if (req.method === "POST") {
-    const { identifier, password } = req.body;
+    const { username, email, password } = req.body;
     // console.log("LOGIN REQ", req.body);
     const strapiRes = await axios
-      .post(`${API_URL}/api/auth/local`, {
-        identifier,
+      .post(`${API_URL}/api/auth/local/register`, {
+        username,
+
+        email,
         password,
       })
       .then((response) => {
@@ -30,7 +32,7 @@ export default async (req, res) => {
         return response;
       })
       .catch((response) => {
-        console.log("FAILED LOGIN", response.response.data.error.message);
+        console.log("FAILED Register", response.response.data.error.message);
         res
           .status(response.response.data.error.status)
           .json({ error: response.response.data.error.message });

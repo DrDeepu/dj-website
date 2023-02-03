@@ -13,7 +13,7 @@ import styles from "@/styles/Form.module.css";
 import Image from "next/image";
 import ImageUpload from "@/components/ImageUpload";
 
-const EditEventPage = ({ data }) => {
+const EditEventPage = ({ data, slug }) => {
   const dat = data.data;
   // console.log("MAIN FUNCTINO ", dat.attributes.Image.data.attributes.formats.large.url);
   const [values, setValues] = useState({
@@ -61,7 +61,7 @@ const EditEventPage = ({ data }) => {
   };
 
   const imageUploaded = () => {
-    console.log("Uploaded");
+    return router.push("/events");
   };
   return (
     <Layout title="Add Event Page">
@@ -164,7 +164,11 @@ const EditEventPage = ({ data }) => {
         </button>
       </div>
       <Model show={showModal} onClose={() => setShowModal(false)}>
-        <ImageUpload eventId={dat.id} imageUploaded={imageUploaded} />
+        <ImageUpload
+          eventId={dat.id}
+          imageUploaded={() => imageUploaded}
+          slug={slug}
+        />
       </Model>
     </Layout>
   );
@@ -172,16 +176,19 @@ const EditEventPage = ({ data }) => {
 
 export default EditEventPage;
 
-export async function getServerSideProps({ params: { id } }) {
+export async function getServerSideProps({ params: { id }, req }) {
   //   console.log(id);
   let data = await axios
     .get(`http://localhost:1337/api/events/${id}?populate=*`)
     .then((response) => {
+      console.log("ID RESPONSE", response.data.data.attributes.Slug);
       return response;
     })
     .catch((response) => console.log("FAILED"));
-  console.log("AXIOS", data);
+  // console.log("AXIOS", data);
+  // console.log(req.headers.cookie);
+  console.log(data.data.data.attributes.Slug);
   return {
-    props: { data: data.data },
+    props: { data: data.data, slug: data.data.data.attributes.Slug },
   };
 }

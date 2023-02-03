@@ -2,8 +2,11 @@ import { useState } from "react";
 import { API_URL } from "@/config/index";
 import styles from "@/styles/Form.module.css";
 import axios from "axios";
-const ImageUpload = ({ eventId, imageUploaded }) => {
+import { useRouter } from "next/router";
+
+const ImageUpload = ({ eventId, imageUploaded, slug }) => {
   const [image, setImage] = useState(null);
+  const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -13,7 +16,12 @@ const ImageUpload = ({ eventId, imageUploaded }) => {
     formData.append("refId", eventId);
     formData.append("field", "Image");
 
-    const datas = await axios.post(`${API_URL}/api/upload`, formData);
+    const datas = await axios
+      .post(`${API_URL}/api/upload`, formData)
+      .then(() => {
+        router.push(`/events/${slug }`);
+        // console.log(eventId);
+      });
 
     // const d = await axios.put(`${API_URL}/api/upload`, {
     //   data: formData,

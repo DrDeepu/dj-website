@@ -45,7 +45,7 @@ const EventPage = ({ dat }) => {
         {dat.attributes.Image && (
           <div className={styles.image}>
             {" "}
-            {console.log('DAT',dat)}
+            {console.log("DAT", dat)}
             <Image
               src={
                 dat.attributes.Image.data != null
@@ -77,12 +77,12 @@ export default EventPage;
 
 export async function getServerSideProps({ query: { slug } }) {
   // console.log("SLUG", slug);
-  const res = await fetch(
+  const res = await axios(
     `${API_URL}/api/events?populate=*&filters[slug][$eq]=${slug}`
-  );
-  const data = await res.json();
-  console.log(data.data);
+  ).then((response) => response);
+  const data = res;
+  console.log(data.data.data);
   return {
-    props: { dat: data.data[0] },
+    props: { dat: data.data.data[0] },
   };
 }
