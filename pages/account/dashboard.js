@@ -1,17 +1,22 @@
 import { parseCookies } from "@/helpers/index";
-import Layout from "@/components/Layout";
+import DashboardEvent from "@/components/DashboardEvent";
 import axios from "axios";
 import { API_URL } from "@/config/index";
 import styles from "@/styles/Dashboard.module.css";
-
-const DashboardPage = () => {
+import Eventitem from "@/components/Eventitem";
+import Layout from "@/components/Layout";
+const DashboardPage = ({ events }) => {
+  console.log(events);
+  function deleteEvent(id) {
+    console.log(id);
+  }
   return (
     <Layout title="User Dashboard">
       <div className={styles.dash}>
         <h1>DashboardPage</h1>
         <h3>My Events</h3>
         {events.map((evt) => (
-          <h3>{evt.name}</h3>
+          <DashboardEvent key={evt.key} evt={evt} handleDelete={deleteEvent} />
         ))}
       </div>
     </Layout>
@@ -22,7 +27,7 @@ export default DashboardPage;
 
 export async function getServerSideProps({ req }) {
   const token = req.cookies.token;
-  console.log("Token", token);
+  // console.log("Token", token);
 
   const config = {
     method: "get",
@@ -35,14 +40,14 @@ export async function getServerSideProps({ req }) {
 
   const events = await axios(config)
     .then(function (response) {
-      console.log(JSON.stringify(response.data));
+      // console.log(JSON.stringify(response.data));
+      console.log("SUCCESS in Dashboard gSSP");
       return response.data;
     })
     .catch(function (error) {
-      console.log(error);
+      // console.log(error);
+      console.log("FAILED in Dashboard gSSP");
     });
-
-  // console.log("KEYS OF EVENTS", events);
   return {
     props: { events: events ? events : null },
   };

@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
       .then((response) => {
         console.log("SUCCESS in Auth Context", response.data.data.user);
         setUser(response);
-        router.push("/");
+        router.push("/accounts/dashboard");
         return response;
       })
       .catch((response) => {

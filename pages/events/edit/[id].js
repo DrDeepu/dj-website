@@ -43,11 +43,12 @@ const EditEventPage = ({ data, slug }) => {
       toast.error("Please fill all the fields");
     } else {
       axios
-        .put(`${API_URL}/api/events/${dat.id}&?populate=*`, { data: values })
+        .put(`${API_URL}/api/events/${dat.id}?populate=*`, { data: values })
         .then((response) => {
-          console.log("SUCCESS", response);
+          // console.log("SUCCESS", response);
+          console.log("SUCCESS", slug);
           const urls = response.data.data.attributes.Slug;
-          router.push("/events");
+          router.push(`/events/${urls}`);
         })
         .catch((response) => console.log("ERROR", response));
 
